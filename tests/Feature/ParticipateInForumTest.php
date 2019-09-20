@@ -14,23 +14,30 @@ class ParticipateInForumTest extends TestCase
      */
     function an_unauthenticated_users_may_not_add_replies()
     {
-//        $this->expectException('Illuminate\Auth\AuthenticationException');
-
-        $thread = create('App\Thread');
+        $thread = create('App\Thread'); 
 
         $reply = create('App\Reply');
 
-        $this->post($thread->path().'/replies',$reply->toArray());
+        $this->withExceptionHandling()
+                ->post($thread->path().'/replies',$reply->toArray())
+                ->assertRedirect('/login');
 
     }
 
     /**
      * @test
+     * 1) Tests\Feature\ParticipateInForumTest::a_authenticated_user_may_participate_in_forum_threads
+     * Failed asserting that '<!doctype html>\n
+     * if we change Route::post to Route::get
+     * test will fail and page is loaded
+     * if we change Route::get to Route::post
+     * test will success and page fail
      */
     function a_authenticated_user_may_participate_in_forum_threads()
     {
 
-        $this->be($user = create('App\User'));
+//        $this->be($user = create('App\User'));
+        $this->signIn();
 
         $thread = create('App\Thread');
 
@@ -40,5 +47,23 @@ class ParticipateInForumTest extends TestCase
 
         $this->get($thread->path())
             ->assertSee($reply->body);
+    }
+
+    /**
+     * @test
+     * fails
+     * Session is missing expected key [errors].
+     * Failed asserting that false is true.
+     */
+    function a_reply_requires_a_body()
+    {
+        $this->withExceptionHandling()->signIn();
+
+        $thread = create('App\Thread');
+
+        $reply = make('App\Reply',['body'=>null]);
+
+        $this->post($thread->path().'/replies',$reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }

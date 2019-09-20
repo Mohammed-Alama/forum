@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Thread;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
+/**
+ * Class ThreadsController
+ * @package App\Http\Controllers
+ */
 class ThreadsController extends Controller
 {
     public function __construct()
@@ -15,7 +20,7 @@ class ThreadsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -26,7 +31,7 @@ class ThreadsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -36,13 +41,20 @@ class ThreadsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return Response
+     * @throws
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'title'=>'required',
+            'body'=>'required',
+            'channel_id'=>'required | exists:channels,id'
+        ]);
        $thread = Thread::create([
             'user_id'=>auth()->id(),
+            'channel_id'=>request('channel_id'),
             'title'=>request('title'),
             'body'=>request('body')
         ]);
@@ -53,10 +65,11 @@ class ThreadsController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param $channel_id
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show($channel_id,Thread $thread)
     {
         return view('threads.show',compact('thread'));
     }
