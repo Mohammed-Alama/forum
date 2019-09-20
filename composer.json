@@ -11,7 +11,8 @@
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.0",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "laravel/ui": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
@@ -42,7 +43,8 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": ["tests/utilities/functions.php"]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
