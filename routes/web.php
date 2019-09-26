@@ -21,11 +21,20 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
-//ThreadsControllers
+//ThreadsController
 Route::get('/threads','ThreadsController@index');
 Route::get('/threads/create','ThreadsController@create');
 Route::post('/threads','ThreadsController@store');
 Route::get('/threads/{channel}/{thread}','ThreadsController@show');
+Route::delete('/threads/{channel}/{thread}','ThreadsController@destroy');
 
-//RepliesControllers
+//RepliesController
 Route::get('/threads/{channel}/{thread}/replies','RepliesController@store');
+
+//ChannelsController
+Route::get('/threads/{channel}','ThreadsController@index');
+
+//FavoritesController
+Route::post('/replies/{reply}/favorites','FavoritesController@store');
+
+Route::get('profiles/{user}','ProfilesController@show')->name('profile');

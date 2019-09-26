@@ -38,6 +38,16 @@ if (token) {
 }
 
 /**
+ * We load Vue.js and make $emit on flash event to load flash message
+ */
+
+window.Vue = require('vue');
+window.events = new Vue();
+
+window.flash = function(message){
+    window.events.$emit('flash',message)
+};
+/**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.

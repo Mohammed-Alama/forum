@@ -1,30 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container" >
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Forum Threads</div>
+                @foreach($threads as $thread)
+                <div class="card" style="margin-bottom: 20px">
+                    <div class="card-header">
 
-                    <div class="card-body">
+                                <div class="level">
 
-                        @foreach($threads as $thread)
-
-                            <article>
-                                <h4>
+                                <h4 class="flex">
                                 <a href="{{$thread->path()}}">
                                     {{$thread->title}}
                                 </a>
                                 </h4>
-                                <div class="body">
-                                    {{$thread->body}}
+                                    <a href="{{$thread->path()}}">
+                                <strong>{{$thread->replies_count}} {{Str::plural('reply',$thread->replies_count)}}</strong>
+                                    </a>
                                 </div>
-                            </article>
-                            <hr>
-                        @endforeach
+                    </div>
+
+                    <div class="card-body">
+                         <div class="body">
+                                    {{$thread->body}}
+                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
         </div>
     </div>
